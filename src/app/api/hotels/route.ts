@@ -4,10 +4,17 @@ import { NextResponse } from 'next/server'
 
 // Ideally instantiate this in a singleton file (lib/prisma.ts) for Next.js HMR best practices, 
 // but for this task putting it here is acceptable.
-const prisma = new PrismaClient()
+const prisma = process.env.DATABASE_URL
+    ? new PrismaClient()
+    : null;
 
 export async function GET() {
     try {
+        if (!prisma) {
+            console.warn("Database not configured (DATABASE_URL missing).");
+            return NextResponse.json({ error: "Database not configured" }, { status: 500 });
+        }
+
         const hotels = await prisma.hotel.findMany({
             include: {
                 images: true,
