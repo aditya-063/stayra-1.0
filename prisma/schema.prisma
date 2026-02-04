@@ -167,3 +167,15 @@ model SearchSnapshot {
   @@index([expiresAt])
   @@map("search_snapshots")
 }
+
+model Click {
+  id            Int      @id @default(autoincrement())
+  hotelId       String   @map("hotel_id")
+  ota           String
+  affiliateLink String   @map("affiliate_link")
+  ip            String
+  device        String?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("clicks")
+}
